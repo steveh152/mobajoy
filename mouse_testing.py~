@@ -61,7 +61,6 @@ def detect_keypress(direction_old):
 			direction = "right"
 		elif win32api.GetAsyncKeyState(27) != 0:
 			return "stop"
-		time.sleep(0.05)
 	return direction
 
 
