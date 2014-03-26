@@ -13,15 +13,18 @@ click_and_return(dir)
 	x_max = 1260
 	;y_max = %A_ScreenHeight% - 20
 	y_max = 780
-	;resolutions = x: %A_ScreenWidth%   y: %A_ScreenHeight%
-	;MsgBox, OK, "Screen Res", %resolutions%
+
+	x_res = A_ScreenWidth
+	y_res = A_ScreenHeight
+	resolutions = x: %x_res%   y: %y_res%
+	MsgBox, OK, "Screen Res", %resolutions%
 
 	; find location of mouse
 	MouseGetPos, x_loc, y_loc
 	; right-click mouse in correct position depending on direction
 	if (dir == "up")
 	{
-		MouseMove, x_mid, 20, 1
+		MouseMove, x_mid, 20, 0
 		dir_str = UP:  x = %x_mid%   y = %20%
 		;MsgBox, OK, "direction/location", %dir_str%
 		Click right
@@ -29,7 +32,7 @@ click_and_return(dir)
 	}
 	else if (dir == "down")
 	{
-		MouseMove, x_mid, y_max
+		MouseMove, x_mid, y_max, 0
 		dir_str = DOWN:  x = %x_mid%   y = %y_max%
 		;MsgBox, OK, "direction/location", %dir_str%
 		Click right
@@ -37,7 +40,7 @@ click_and_return(dir)
 	}
 	else if (dir == "left")
 	{
-		MouseMove, 20, y_mid
+		MouseMove, 20, y_mid, 0
 		dir_str = LEFT:  x = %20%   y = %y_mid%
 		;MsgBox, OK, "direction/location", %dir_str%
 		Click right
@@ -45,14 +48,14 @@ click_and_return(dir)
 	}
 	else if (dir == "right")
 	{
-		MouseMove, x_max, y_mid
+		MouseMove, x_max, y_mid, 0
 		dir_str = RIGHT:  x = %x_max%   y = %y_mid%
 		;MsgBox, OK, "direction/location", %dir_str%
 		Click right
 		;Click right %x_max%, %y_mid%
 	}
 	; return mouse to previous location
-	MouseMove, x_loc, y_loc
+	MouseMove, x_loc, y_loc, 0
 }
 
 move_while_pressed(btn, dir)
