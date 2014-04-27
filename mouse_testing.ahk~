@@ -14,44 +14,49 @@ click_and_return(dir)
 	;y_max = %A_ScreenHeight% - 20
 	y_max = 780
 
-	x_res = A_ScreenWidth
-	y_res = A_ScreenHeight
+	x_res = %A_ScreenWidth%
+	y_res = %A_ScreenHeight%
 	resolutions = x: %x_res%   y: %y_res%
-	MsgBox, OK, "Screen Res", %resolutions%
+	;MsgBox, OK, "Screen Res", %resolutions%
 
 	; find location of mouse
 	MouseGetPos, x_loc, y_loc
 	; right-click mouse in correct position depending on direction
+	; FOR CONTROLCLICK: use winspector to find window name, controls, etc.
 	if (dir == "up")
 	{
-		MouseMove, x_mid, 20, 0
 		dir_str = UP:  x = %x_mid%   y = %20%
 		;MsgBox, OK, "direction/location", %dir_str%
-		Click right
-		;Click right x_mid, 20  ;(this isn't clicking in right place)
+		;MouseMove, x_mid, 20, 0
+		;Click right
+		ControlClick, x640, y20, FirefoxWindowClass, Right
+		;Click right %x_mid%, 20
 	}
 	else if (dir == "down")
 	{
-		MouseMove, x_mid, y_max, 0
 		dir_str = DOWN:  x = %x_mid%   y = %y_max%
 		;MsgBox, OK, "direction/location", %dir_str%
-		Click right
+		;MouseMove, x_mid, y_max, 0
+		;Click right
+		ControlClick, x640, y780, FirefoxWindowClass, Right
 		;Click right %x_mid%, %y_max%
 	}
 	else if (dir == "left")
 	{
-		MouseMove, 20, y_mid, 0
-		dir_str = LEFT:  x = %20%   y = %y_mid%
+		dir_str = LEFT:  x = 20   y = %y_mid%
 		;MsgBox, OK, "direction/location", %dir_str%
-		Click right
-		;Click right 20, %y_mid%
+		;MouseMove, 20, y_mid, 0
+		;Click right
+		ControlClick, x20, y400, FirefoxWindowClass, Right
+		;Click right %20%, %y_mid%
 	}
 	else if (dir == "right")
 	{
-		MouseMove, x_max, y_mid, 0
 		dir_str = RIGHT:  x = %x_max%   y = %y_mid%
 		;MsgBox, OK, "direction/location", %dir_str%
-		Click right
+		;MouseMove, x_max, y_mid, 0
+		;Click right
+		ControlClick, x1260, y400, FirefoxWindowClass, Right
 		;Click right %x_max%, %y_mid%
 	}
 	; return mouse to previous location

@@ -1,0 +1,3 @@
+; Test functionality of ControlClick
+
+ControlClick x0, y0, FirefoxWindowClass

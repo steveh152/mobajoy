@@ -2,6 +2,13 @@
 ; FUNCTIONS 
 ;==================================================================
 
+window_click()
+{
+	MsgBox, OK, "about to click", %dir_str%
+	ControlClick, x55 y77, right, A
+	MsgBox, OK, "just clicked", %dir_str%
+}
+
 click_and_return(dir)
 {
 	; define limits of screen resolution
@@ -17,42 +24,32 @@ click_and_return(dir)
 	x_res = %A_ScreenWidth%
 	y_res = %A_ScreenHeight%
 	resolutions = x: %x_res%   y: %y_res%
-	MsgBox, OK, "Screen Res", %resolutions%
+	;MsgBox, OK, "Screen Res", %resolutions%
 
 	; find location of mouse
 	MouseGetPos, x_loc, y_loc
 	; right-click mouse in correct position depending on direction
-	if (dir == "up")
-	{
-		MouseMove, x_mid, 20, 0
+	; FOR CONTROLCLICK: use winspector to find window name, controls, etc.
+	if (dir == "up") {
 		dir_str = UP:  x = %x_mid%   y = %20%
 		;MsgBox, OK, "direction/location", %dir_str%
+		MouseMove, x_mid, 20, 0
 		Click right
-		;Click right x_mid, 20  ;(this isn't clicking in right place)
 	}
-	else if (dir == "down")
-	{
-		MouseMove, x_mid, y_max, 0
+	else if (dir == "down") {
 		dir_str = DOWN:  x = %x_mid%   y = %y_max%
-		;MsgBox, OK, "direction/location", %dir_str%
+		MouseMove, x_mid, y_max, 0
 		Click right
-		;Click right %x_mid%, %y_max%
 	}
-	else if (dir == "left")
-	{
+	else if (dir == "left") {
+		dir_str = LEFT:  x = 20   y = %y_mid%
 		MouseMove, 20, y_mid, 0
-		dir_str = LEFT:  x = %20%   y = %y_mid%
-		;MsgBox, OK, "direction/location", %dir_str%
 		Click right
-		;Click right 20, %y_mid%
 	}
-	else if (dir == "right")
-	{
-		MouseMove, x_max, y_mid, 0
+	else if (dir == "right") {
 		dir_str = RIGHT:  x = %x_max%   y = %y_mid%
-		;MsgBox, OK, "direction/location", %dir_str%
+		MouseMove, x_max, y_mid, 0
 		Click right
-		;Click right %x_max%, %y_mid%
 	}
 	; return mouse to previous location
 	MouseMove, x_loc, y_loc, 0
@@ -60,7 +57,13 @@ click_and_return(dir)
 
 move_while_pressed(btn, dir)
 {
-	while (is_pressed==1)
+	; define center of screen
+	;x_mid = %A_ScreenWidth%/2
+	x_mid = 640
+	;y_mid = %A_ScreenHeight%/2
+	y_mid = 400
+
+	while (GetKeyState(btn, "P"))
 	{
 		;right-click in direction given
 		click_and_return(dir)
@@ -70,17 +73,15 @@ move_while_pressed(btn, dir)
 		;increments, so that if the button is released at any time the
 		;wait will terminate.
 		time = 0
-		while (time < 5000 && is_pressed == 1)
+		while (time < 2500 && GetKeyState(btn, "P"))
 		{
 			;sleep for 0.1 seconds
 			Sleep, 100
 			time += 100
-
-			;check key state
-			GetKeyState, is_pressed, %btn%
 		}
 	}
 
+	;Msgbox, OK, "here"
 	;find current location of mouse
 	MouseGetPos, x_loc, y_loc
 
@@ -103,7 +104,9 @@ move_while_pressed(btn, dir)
 CoordMode, Mouse, Screen
 
 ; detect button press and move accordingly
-Up::click_and_return("up")
-Down::click_and_return("down")
-Left::click_and_return("left")
-Right::click_and_return("right")
+$Up::move_while_pressed("Up", "up")
+$Down::move_while_pressed("Down", "down")
+$Left::move_while_pressed("Left", "left")
+$Right::move_while_pressed("Right", "right")
+; try out controlclick
+Home::window_click()
